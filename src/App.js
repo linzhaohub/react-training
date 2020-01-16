@@ -9,6 +9,7 @@ class App extends React.Component {
         {text: 'gym', due: '2020-01-18'},
         {text: 'Visit friend', due: '2020-01-18'}],
       date: new Date(),
+      newTask: undefined,
     }
   }
 
@@ -26,6 +27,24 @@ class App extends React.Component {
   tick() {
     this.setState({date: new Date()})
   };
+
+  onAddTask = (e) => {
+    const { newTask } = this.state;
+    if (newTask.text && newTask.due) {
+      this.setState({list: [...this.state.list, this.state.newTask]})
+    }
+    e.preventDefault();
+  }
+
+  onInputText = (e) => {
+    const { newTask } = this.state;
+    this.setState({ newTask: { ...newTask, text: e.target.value }});
+  }
+
+  onPickDate = (e) => {
+    const { newTask } = this.state;
+    this.setState({ newTask: { ...newTask, due: e.target.value }});
+  }
 
   render() {
     const options = { 
@@ -49,6 +68,17 @@ class App extends React.Component {
       <div>
         <h1>{today}</h1>
         {listElement}
+        <form onSubmit={this.onAddTask}>
+          <label>
+            Add Task: <input type="text" onChange={this.onInputText} />
+          </label>
+          <br/>
+          <label>
+            Pick Due Date: <input type="date" onChange={this.onPickDate} />
+          </label>
+          <br/>
+          <input type="submit" value="Add Task" />
+        </form>
       </div>
     );
   }
