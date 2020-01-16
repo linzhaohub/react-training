@@ -9,7 +9,7 @@ class App extends React.Component {
         {text: 'gym', due: '2020-01-18'},
         {text: 'Visit friend', due: '2020-01-18'}],
       date: new Date(),
-      newTask: undefined,
+      newTask: { text: '', due: ''},
     }
   }
 
@@ -30,21 +30,29 @@ class App extends React.Component {
 
   onAddTask = (e) => {
     const { newTask } = this.state;
-    if (newTask.text && newTask.due) {
-      this.setState({list: [...this.state.list, this.state.newTask]})
+    if (newTask.text !== '' && newTask.due !== '') {
+      this.setState({list: [...this.state.list, this.state.newTask]});
     }
+    this.setState({ newTask: { text: '', due: ''} });
     e.preventDefault();
   }
 
-  onInputText = (e) => {
+  onChange = (e) => {
+    const target = e.target;
     const { newTask } = this.state;
-    this.setState({ newTask: { ...newTask, text: e.target.value }});
+    const name = target.name;
+    this.setState({ newTask: { ...newTask, [name]: target.value }});
   }
 
-  onPickDate = (e) => {
-    const { newTask } = this.state;
-    this.setState({ newTask: { ...newTask, due: e.target.value }});
-  }
+  // onInputText = (e) => {
+  //   const { newTask } = this.state;
+  //   this.setState({ newTask: { ...newTask, text: e.target.value }});
+  // }
+
+  // onPickDate = (e) => {
+  //   const { newTask } = this.state;
+  //   this.setState({ newTask: { ...newTask, due: e.target.value }});
+  // }
 
   render() {
     const options = { 
@@ -70,11 +78,11 @@ class App extends React.Component {
         {listElement}
         <form onSubmit={this.onAddTask}>
           <label>
-            Add Task: <input type="text" onChange={this.onInputText} />
+            Add Task: <input name="text" type="text" value={this.state.newTask.text} onChange={this.onChange} />
           </label>
           <br/>
           <label>
-            Pick Due Date: <input type="date" onChange={this.onPickDate} />
+            Pick Due Date: <input name="due" type="date" value={this.state.newTask.due} onChange={this.onChange} />
           </label>
           <br/>
           <input type="submit" value="Add Task" />
